@@ -1,0 +1,21 @@
+.container {
+    background-color: peru;
+    display: flex;
+    flex-direction: row;
+}
+.board {
+    background-color: palevioletred;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    
+}
+.block {
+    padding: 80px 80px;
+    border: solid 1px;
+    font-size: 30px;
+}
+.dice {
+    background-color: paleturquoise;
+}
