@@ -21,9 +21,9 @@ const createMatrix = function(n) {
         
         rows.push(outerRows[i].map(el =>{
             var ele = el + (n*i)
-            if (ele < 10) {
-                ele = "0" + ele 
-            }
+        //     if (ele < 10) {
+        //         ele = "0" + ele 
+        //     }
         return ele 
         } ))
   
@@ -53,7 +53,7 @@ const createBoard = function() {
     rows.map(row => {
         str += `<div class="row">`
         row.map(block => {
-            str += `<div class="block" data-value=${block}> ${block} </div>`
+            str += `<div class="block" id=${block} data-value=${block}> ${block} </div>`
         })
         str += `</div>`
     })
@@ -65,28 +65,179 @@ const createBoard = function() {
 createBoard();
 console.log($('.row'))
 
-var size = n * 200
-board.css("width", size + "px");
-board.css("height", size + "px");
+// Specify board and block sizes
+var dimension = 100;
+var boardSize = n * dimension;
+var blockSize = dimension;
+const block  = $('.block');
+board.css("width", boardSize + "px");
+board.css("height", boardSize + "px");
+block.css("width", blockSize + "px");
+block.css("height", blockSize + "px");
+
 
 
 console.log($('.row:nth-child(4) .block:nth-child(2)').text());
-console.log($('.block:nth-child(4)').text());
-console.log($('.row')[0])
+// console.log($('.block:nth-child(4)').text());
+// console.log($('.row')[0])
 
 
-// Change colour of every second square to make chequered board
+// // Change colour of every second square to make chequered board
 const boardColor = function() {
-    console.log("test")
-    for (let i = 1; 1 <= n; i++) {
+    // console.log("test")
+    for (let i = 1; i <= n; i++) {
         for (let j = 1; j <= n; j++) {
             // console.log($('.row:nth-child('+i+') .block:nth-child('+j+')').text())
-            // if ($('.row:nth-child('+i+') .block:nth-child('+j+')').text() % 2 ==0){
-            //     console.log("even")
-            //     $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "red")
-        // }
+            if ($('.row:nth-child('+i+') .block:nth-child('+j+')').text() % 2 ==0){
+                // console.log("even")
+                $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "red")
+        } else {
+            $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "white")
+        }
         
     }
     }
 }
 boardColor();
+
+//Add snakes and ladders to board
+// const snakesAndLadders = function() {
+//     snakePositions.forEach(el => {
+//         $('#'+el).append('<img/>')
+//     });
+//     ladderPositions.forEach(ele => {
+//         $('#'+ele).append('<img/>')
+//     });
+// }
+// snakesAndLadders();
+// console.log($('#34 img'));
+
+// Add snake to board
+board.prepend('<img src="images/scarysnake3.png" id="snake" />')
+let snake = $('#snake')
+snake.css({"height": "500px", "width": "500px", "position": "absolute"});
+snake.hide();
+// let snakePositions = [28, 19, 34, 12];
+// snakePositions.forEach(position => {
+//     $('#'+position).append('<img src="images/scarysnake.png" id="snake"'+position+'/>'); 
+// });
+// console.log($('#snake28'))
+// $('#28 img').attr({"src":"images/scarysnake1.png", "id":"snake28"})
+// $('#19 img').attr({"src":"images/scarysnake2.png", "id":"snake19"})
+// $('#34 img').attr({"src":"images/scarysnake3.png", "id":"snake34"})
+// $('#12 img').attr({"src":"images/scarysnake4.png", "id":"snake12"})
+// $('#28').attr("src","images/scarysnake1.png" "id", "snake1" />');
+// $('#12').append('<img src="images/scarysnake.png" id="snake2" />');
+// $('#19').append('<img src="images/scarysnake.png" id="snake3" />');
+// $('#34').append('<img src="images/scarysnake.png" id="snake4" />');
+// let snake28 = $('#snake28');
+// let snake19 = $('#snake19');
+// let snake34 = $('#snake34');
+// let snake12 = $('#snake12');
+
+// snake28.css({"height": "100px", "width": "100px", "position": "absolute"});
+// snake19.css({"height": "100px", "width": "100px", "position": "absolute"});
+// snake34.css({"height": "100px", "width": "100px", "position": "absolute"});
+// snake12.css({"height": "100px", "width": "100px", "position": "absolute"});
+// Remove snake from board
+// snake28.hide();
+// snake19.hide();
+// snake34.hide();
+// snake12.hide();
+
+// Add player icons to square one of the board
+$('#1').append('<img src="images/super-gal.png" id="player-1" />');
+let playerOne = $('#player-1');
+playerOne.css("height", "50px")
+playerOne.css("width", "50px")
+playerOne.css("position", "absolute");
+
+// Create snake and ladder positions
+let snakePositions = [28, 19, 34, 12];
+let ladderPositions = [4, 13, 21, 27];
+
+
+// When the button is clicked: shake the dice, create a random no between 1 and 6, assign that to the dice value and change the dice image to represent the dice value
+// Check shake-element-transform folder for shake() function
+// Dice value is added to player position and position of player one is updated accordingly
+let button = $('button');
+let dice = $('#dice-id');
+let diceValue = 0;
+let playerOnePosition = 1;
+const rollDice = function () {
+    button.click(function () {
+        console.log("button is clicked")
+        dice.shake();
+        diceValue = Math.ceil(Math.random()* 6);
+        dice.attr("src", "images/dice-"+diceValue+".png")
+        playerOnePosition += diceValue
+        console.log(playerOnePosition)
+        console.log($('#'+playerOnePosition))
+        $('#'+playerOnePosition).append(playerOne).hide()
+        $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
+        snakePositions.forEach(x => {
+            if (x == playerOnePosition) {
+                snake.show();
+                snake.shake();
+                console.log("snake!!!")
+                var spaceJump = (Math.ceil(Math.random()* 10));
+                alert("Ssssssss, bad newsssss, you go back "+spaceJump+" spacesssssss!");
+                playerOnePosition = playerOnePosition - spaceJump;
+                snake.fadeOut(5000);
+                $('#'+playerOnePosition).append(playerOne).hide();
+                $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+            }
+        });
+    })
+}
+rollDice();
+// console.log(snake1.parent())
+// if (snake1.parent == $('#'+playerOnePosition)) {
+//     console.log(matched)
+// }
+// console.log(playerOnePosition);
+// const checkSnake = function () {
+// snakePositions.forEach(x => {
+//     console.log(x)
+//     if (x == playerOnePosition) {
+//         console.log("snake!!!")
+//         snake1.show();
+//         playerOnePosition = playerOnePosition - (Math.ceil(Math.random()* 10));
+//         $('#'+playerOnePosition).append(playerOne);
+//         snake1.hide();
+//     }
+// });
+// }
+// checkSnake();
+
+
+
+// const checkSnake = function() {
+//     if ($('#'+playerOnePosition)== snake1.parent() ) {
+//         console.log(snake1.parent())
+//         snake1.show();
+//         playerOnePosition = playerOnePosition - (Math.ceil(Math.random()* 10));
+//         $('#'+playerOnePosition).append(playerOne);
+//         snake1.hide();
+//     } else if ($('#'+playerOnePosition)== snake2.parent()) {
+//         console.log(snake2.parent())
+//         snake2.show();
+//         playerOnePosition = playerOnePosition - (Math.ceil(Math.random()* 10));
+//         $('#'+playerOnePosition).append(playerOne);
+//         snake2.hide();
+//     } else if ($('#'+playerOnePosition)== snake3.parent()) {
+//         console.log(snake3.parent())
+//         snake3.show();
+//         playerOnePosition = playerOnePosition - (Math.ceil(Math.random()* 10));
+//         $('#'+playerOnePosition).append(playerOne);
+//         snake3.hide();
+//     } else if ($('#'+playerOnePosition)== snake4.parent()) {
+//         console.log(snake4.parent())
+//         snake4.show();
+//         playerOnePosition = playerOnePosition - (Math.ceil(Math.random()* 10));
+//         $('#'+playerOnePosition).append(playerOne);
+//         snake4.hide();
+//     }
+// }
+// checkSnake();
+
