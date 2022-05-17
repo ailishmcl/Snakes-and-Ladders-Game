@@ -114,9 +114,14 @@ boardColor();
 
 // Add snake to board
 board.prepend('<img src="images/scarysnake3.png" id="snake" />')
+board.prepend('<img src="images/ladder.png" id="ladder" />')
+
 let snake = $('#snake')
+let ladder = $('#ladder')
 snake.css({"height": "500px", "width": "500px", "position": "absolute"});
 snake.hide();
+ladder.css({"height": "500px", "width": "500px", "position": "absolute"});
+ladder.hide();
 // let snakePositions = [28, 19, 34, 12];
 // snakePositions.forEach(position => {
 //     $('#'+position).append('<img src="images/scarysnake.png" id="snake"'+position+'/>'); 
@@ -155,7 +160,36 @@ playerOne.css("position", "absolute");
 // Create snake and ladder positions
 let snakePositions = [28, 19, 34, 12];
 let ladderPositions = [4, 13, 21, 27];
-
+// Create functions to check if snake or ladder exist in player one's position
+const checkSnake = function() {
+    snakePositions.forEach(x => {
+        if (x == playerOnePosition) {
+            snake.show();
+            snake.shake();
+            console.log("snake!!!")
+            alert("Ssssssss, bad newsssss, you go back "+spaceJump+" spacesssssss!");
+            playerOnePosition = playerOnePosition - spaceJump;
+            snake.fadeOut(5000);
+            $('#'+playerOnePosition).append(playerOne).hide();
+            $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+        }
+    });
+}
+const checkLadder = function () {
+    ladderPositions.forEach(y => {
+        if (y == playerOnePosition) {
+            ladder.show();
+        ladder.shake();
+        console.log("ladder!!")
+        alert("Yahoooo, good news, you go forward "+spaceJump+" spaces!");
+            playerOnePosition = playerOnePosition + spaceJump;
+            ladder.fadeOut(5000);
+            $('#'+playerOnePosition).append(playerOne).hide();
+            $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+        }
+    });
+}
+var spaceJump = (Math.ceil(Math.random()* 10));
 
 // When the button is clicked: shake the dice, create a random no between 1 and 6, assign that to the dice value and change the dice image to represent the dice value
 // Check shake-element-transform folder for shake() function
@@ -175,19 +209,8 @@ const rollDice = function () {
         console.log($('#'+playerOnePosition))
         $('#'+playerOnePosition).append(playerOne).hide()
         $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
-        snakePositions.forEach(x => {
-            if (x == playerOnePosition) {
-                snake.show();
-                snake.shake();
-                console.log("snake!!!")
-                var spaceJump = (Math.ceil(Math.random()* 10));
-                alert("Ssssssss, bad newsssss, you go back "+spaceJump+" spacesssssss!");
-                playerOnePosition = playerOnePosition - spaceJump;
-                snake.fadeOut(5000);
-                $('#'+playerOnePosition).append(playerOne).hide();
-                $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
-            }
-        });
+        checkSnake();
+        checkLadder();
     })
 }
 rollDice();
