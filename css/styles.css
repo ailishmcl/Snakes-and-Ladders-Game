@@ -78,3 +78,10 @@ button {
     height: 50px;
     width: 50px;
 }
+.meteor{
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+}

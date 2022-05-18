@@ -181,19 +181,73 @@ var villain = $('#villain')
 villain.css({"position": "absolute", "height": "50px", "width": "50px"})
 
 // Add rocket to board
-$('#15').append('<img class="rocket "id="rocket1" src="images/rocket.png" />')
+let rocketPositions = [4, 17, 23, 10]
 let rocket = $('.rocket')
+const locateRocket = function () {
+    rocketPositions.forEach(element => {
+        console.log($('#'+element))
+        $('#'+element).append(`<img class="rocket" id="rocket${element}" src="images/rocket.png" />`)
+        // $('#'+element).append('<img class="rocket" src="images/rocket.png" />')
+    });
+}
+
+// Add meteor to the board
+let meteorPositions = [13, 20, 26, 34];
+let meteor = $('.meteor')
+const locateMeteor = function () {
+    meteorPositions.forEach(element => {
+        console.log($('#'+element))
+        $('#'+element).append(`<img class="meteor" id="meteor${element}" src="images/meteor.png" />`)
+    });
+}
+locateRocket();
+locateMeteor();
+
+// $('#15').append('<img class="rocket "id="rocket1" src="images/rocket.png" />')
+
 // rocket.css({"position": "absolute", "height": "50px", "width": "50px"})
-rocket.click( function () {
-    rocket.animate({
+// rocket.click( function (event) {
+//         var targ = $(event.target)
+//         console.log(event)
+//         console.log(targ)
+//         targ.animate({
+//         height: (50+(jumpForward*20))+"px",
+//         width: (50+(jumpForward*20))+"px",
+//         bottom: "+=500px",
+//         left: "+=500px"
+//     }, 5000, function () {
+//         rocketPositions.forEach(element => {
+//             console.log($('#'+element))
+//             $('#'+element).append(`<img class="rocket" id="rocket${element}" src="images/rocket.png" />`)
+//             // $('#'+element).append('<img class="rocket" src="images/rocket.png" />')
+//         });
+//         // $('#rocket'+).append('<img class="rocket "id="rocket1" src="images/rocket.png" />');
+//     });
+// });
+
+//  Make rocket animation function
+const rocketAnimation = function (x) {
+        $('#rocket'+x).animate({
         height: (50+(jumpForward*20))+"px",
         width: (50+(jumpForward*20))+"px",
-        bottom: "+=500px",
-        left: "+=500px"
+        bottom: "+=900px",
+        left: "+=900px"
     }, 5000, function () {
-        $('#15').append('<img class="rocket "id="rocket1" src="images/rocket.png" />');
+            locateRocket()
     });
-});
+}
+
+// Make meteor animation function
+const meteorAnimation = function (y) {
+    $('#meteor'+y).animate({
+        height: (50+(jumpForward*20))+"px",
+        width: (50+(jumpForward*20))+"px",
+        top: "+=900px",
+        right: "+=900px"
+    }, 5000, function () {
+        locateMeteor()
+    })
+}
 
 // Add player icons to square one of the board
 // $('#1').append('<img src="images/super-gal.png" id="player-1" />');
@@ -203,40 +257,40 @@ rocket.click( function () {
 // playerOne.css("position", "absolute");
 
 // Create snake and ladder positions
-let snakePositions = [28, 19, 34, 12];
-let ladderPositions = [4, 13, 21, 27];
+// let snakePositions = [28, 19, 34, 12];
+// let ladderPositions = [4, 13, 21, 27];
 // Create functions to check if snake or ladder exist in player one's position
-const checkSnake = function() {
-    snakePositions.forEach(x => {
+const checkRocket = function() {
+    rocketPositions.forEach(x => {
         if (x == playerOnePosition) {
-            snake.show();
-            snake.shake();
-            console.log("snake!!!")
-            alert("Ssssssss, bad newsssss, you go back "+jumpBackward+" spacesssssss!");
-            playerOnePosition = playerOnePosition - jumpBackward;
-            snake.fadeOut(5000);
+            rocketAnimation(x);
+            console.log("rocket!!!")
+            // alert("Ssssssss, bad newsssss, you go back "+jumpBackward+" spacesssssss!");
+            playerOnePosition = playerOnePosition + jumpForward;
+            // snake.fadeOut(5000);
             $('#'+playerOnePosition).append(playerOne).hide();
             $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
         } else if (x == villainPosition){
-            alert("The villain has hit a snake!!")
-            villainPosition = villainPosition - jumpBackward;
+            rocketAnimation(x);
+            alert("The villain has hopped on a rocket!!")
+            villainPosition = villainPosition + jumpForward;
         }
     });
 }
-const checkLadder = function () {
-    ladderPositions.forEach(y => {
+const checkMeteor = function () {
+    meteorPositions.forEach(y => {
         if (y == playerOnePosition) {
-            ladder.show();
-        ladder.shake();
-        console.log("ladder!!")
-        alert("Yahoooo, good news, you go forward "+jumpForward+" spaces!");
-            playerOnePosition = playerOnePosition + jumpForward;
-            ladder.fadeOut(5000);
+        meteorAnimation(y);
+        console.log("meteor!!")
+        // alert("Yahoooo, good news, you go forward "+jumpForward+" spaces!");
+            playerOnePosition = playerOnePosition - jumpBackward;
+            // ladder.fadeOut(5000);
             $('#'+playerOnePosition).append(playerOne).hide();
             $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
         } else if (y == villainPosition) {
-            alert("Oh no... the villain has found a ladder....")
-            villainPosition = villainPosition + jumpForward;
+            meteorAnimation(y);
+            alert("Good news... the villain has been hit by a meteor....")
+            villainPosition = villainPosition - jumpBackward;
         }
     });
 }
@@ -247,9 +301,9 @@ var jumpBackward = (Math.ceil(Math.random()* 10));
 // Create a function that checks to determine if you win the game
 const checkWinner = function () {
     if (playerOnePosition >=(n*n)) {
-        alert("You have defeated the snakes and won the game!!!")
+        alert("You have defeated Grok in the race to space and disarmed the bomb! Congratulations, you saved mankind!!!")
     } else if (villainPosition >= (n*n)) {
-        alert("You have been beaten by the evil villain!")
+        alert("You have been defeated by the evil Grok in the race to space; the future of mankind is at risk!")
     }
 }
 
@@ -274,9 +328,10 @@ const playerMove = function () {
         // console.log($('#'+playerOnePosition))
         $('#'+playerOnePosition).append(playerOne).hide()
         $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
-        checkSnake();
-        checkLadder();
+        checkRocket();
+        checkMeteor();
         checkWinner();
+        button.off("click");
     // })
     return playerOnePosition
 }
@@ -301,9 +356,10 @@ const computerMove = function () {
     $('#'+villainPosition).append(villain).fadeIn(1000);
     console.log(villainPosition)
     console.log($('#'+villainPosition))
-    checkSnake();
-    checkLadder();
+    checkRocket();
+    checkMeteor();
     checkWinner();
+    button.on("click", playerMove);
     return villainPosition
 }
 
@@ -313,13 +369,13 @@ const computerMove = function () {
 const playGame = function () {
     button.click(function () {
         playerMove();
-    })
+    });
     alert("The evil villain is on their way, click on them to see how far they've got!")
     villain.click(function(){
         console.log("villain clicked")
         console.log(villainPosition)
         computerMove();
-    })
+    });
     // rollDice();
 }
 
