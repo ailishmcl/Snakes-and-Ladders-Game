@@ -100,6 +100,15 @@ const boardColor = function() {
 }
 boardColor();
 
+//Add superhero selector
+$('.selector').prepend('<p id="chooseSuperhero">Click to choose your superhero!</p>')
+$('.selector').append('<div class="superhero" id="pyro"></div><div class="superhero" id="speed"></div><div class="superhero" id="power"></div>')
+$('#pyro').append('<img src="images/pyro.png" id="pyroImg"/>');
+$('#power').append('<img src="images/power.png" id="powerImg"/>');
+$('#speed').append('<img src="images/speed.png" id="speedImg"/>');
+
+
+
 //Add snakes and ladders to board
 // const snakesAndLadders = function() {
 //     snakePositions.forEach(el => {
@@ -150,12 +159,28 @@ ladder.hide();
 // snake34.hide();
 // snake12.hide();
 
+// Choose your superhero and add to the board
+var playerOne = undefined;
+const chooseHero = function () {
+    $('.superhero img').click(function(e) {
+        console.log($(e.target))
+        var target = $(e.target)
+        if (target.is("img")) {
+        $('#1').append(target);
+        playerOne = target
+        playerOne.css({"position": "absolute", "height": "50px", "width": "50px"})
+        }
+        // $('#pyro')+e.target.nodeName.hide();
+    })
+}
+chooseHero();
+
 // Add player icons to square one of the board
-$('#1').append('<img src="images/super-gal.png" id="player-1" />');
-let playerOne = $('#player-1');
-playerOne.css("height", "50px")
-playerOne.css("width", "50px")
-playerOne.css("position", "absolute");
+// $('#1').append('<img src="images/super-gal.png" id="player-1" />');
+// let playerOne = $('#player-1');
+// playerOne.css("height", "50px")
+// playerOne.css("width", "50px")
+// playerOne.css("position", "absolute");
 
 // Create snake and ladder positions
 let snakePositions = [28, 19, 34, 12];
@@ -189,7 +214,17 @@ const checkLadder = function () {
         }
     });
 }
+// Create variable to determine a random number between one and ten that landing on a snake or ladder makes you jump
 var spaceJump = (Math.ceil(Math.random()* 10));
+
+// Create a function that checks to determine if you win the game
+const checkWinner = function () {
+    if (playerOnePosition >=(n*n)) {
+        alert("You have defeated the snakes and won the game!!!")
+    }
+}
+
+
 
 // When the button is clicked: shake the dice, create a random no between 1 and 6, assign that to the dice value and change the dice image to represent the dice value
 // Check shake-element-transform folder for shake() function
@@ -211,6 +246,7 @@ const rollDice = function () {
         $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
         checkSnake();
         checkLadder();
+        checkWinner();
     })
 }
 rollDice();

@@ -42,6 +42,27 @@ button {
     height: 150px;
     width: 150px;
 }
-.snake {
-    
+.selector {
+    background-color: blue;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.superhero {
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border: solid 1px;
+    display: flex;
+    align-self: center;
+}
+#chooseSuperhero {
+    color: white;
+}
+.superhero img {
+    height: 50px;
+    width: 50px;
+    align-self: center;
+    margin: auto;
 }
