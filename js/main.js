@@ -100,6 +100,11 @@ const boardColor = function() {
 }
 boardColor();
 
+// Add text box to explain game
+$('body').prepend('<div class="welcomeMessage"> <p> Welcome to Race to Space! <br> Click to roll the dice and then click Grok, the evil villain, before you click again!</p></div>')
+$('.welcomeMessage').css({"position": "absolute", "width": "400px", "height": "300px", "background-color": "white", "color": "red"});
+// $('.welcomeMessage').hide();
+
 //Add superhero selector
 $('.selector').prepend('<p id="chooseSuperhero">Click to choose your superhero!</p>')
 $('.selector').append('<div class="superhero" id="pyro"></div><div class="superhero" id="speed"></div><div class="superhero" id="power"></div>')
@@ -122,15 +127,15 @@ $('#speed').append('<img src="images/speed.png" id="speedImg"/>');
 // console.log($('#34 img'));
 
 // Add snake to board
-board.prepend('<img src="images/scarysnake3.png" id="snake" />')
-board.prepend('<img src="images/ladder.png" id="ladder" />')
+// board.prepend('<img src="images/scarysnake3.png" id="snake" />')
+// board.prepend('<img src="images/ladder.png" id="ladder" />')
 
-let snake = $('#snake')
-let ladder = $('#ladder')
-snake.css({"height": "500px", "width": "500px", "position": "absolute"});
-snake.hide();
-ladder.css({"height": "500px", "width": "500px", "position": "absolute"});
-ladder.hide();
+// let snake = $('#snake')
+// let ladder = $('#ladder')
+// snake.css({"height": "500px", "width": "500px", "position": "absolute"});
+// snake.hide();
+// ladder.css({"height": "500px", "width": "500px", "position": "absolute"});
+// ladder.hide();
 // let snakePositions = [28, 19, 34, 12];
 // snakePositions.forEach(position => {
 //     $('#'+position).append('<img src="images/scarysnake.png" id="snake"'+position+'/>'); 

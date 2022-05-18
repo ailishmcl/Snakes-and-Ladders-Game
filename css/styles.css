@@ -1,5 +1,14 @@
 body {
     background-color: darkseagreen;
+    position: relative;
+}
+.welcomeMessage {
+    text-align: center;
+    margin: auto;
+    z-index: 1000;
+}
+.welcomeMessage p {
+    align-self: center;
 }
 h1 {
     text-align: center;
