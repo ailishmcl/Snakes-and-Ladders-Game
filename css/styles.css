@@ -22,6 +22,7 @@ h1 {
 .block {
     border: solid 1px;
     font-size: 20px;
+    position: relative;
 }
 .dice {
     background-color: white;
@@ -65,4 +66,15 @@ button {
     width: 50px;
     align-self: center;
     margin: auto;
+}
+#villain {
+    bottom: 0;
+    right: 0;
+}
+.rocket{
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    height: 50px;
+    width: 50px;
 }

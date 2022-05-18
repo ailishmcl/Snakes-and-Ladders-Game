@@ -175,6 +175,26 @@ const chooseHero = function () {
 }
 chooseHero();
 
+//Add villain to the board
+$('#1').append('<img src="images/villain.png" id="villain" />')
+var villain = $('#villain')
+villain.css({"position": "absolute", "height": "50px", "width": "50px"})
+
+// Add rocket to board
+$('#15').append('<img class="rocket "id="rocket1" src="images/rocket.png" />')
+let rocket = $('.rocket')
+// rocket.css({"position": "absolute", "height": "50px", "width": "50px"})
+rocket.click( function () {
+    rocket.animate({
+        height: (50+(jumpForward*20))+"px",
+        width: (50+(jumpForward*20))+"px",
+        bottom: "+=500px",
+        left: "+=500px"
+    }, 5000, function () {
+        $('#15').append('<img class="rocket "id="rocket1" src="images/rocket.png" />');
+    });
+});
+
 // Add player icons to square one of the board
 // $('#1').append('<img src="images/super-gal.png" id="player-1" />');
 // let playerOne = $('#player-1');
@@ -192,11 +212,14 @@ const checkSnake = function() {
             snake.show();
             snake.shake();
             console.log("snake!!!")
-            alert("Ssssssss, bad newsssss, you go back "+spaceJump+" spacesssssss!");
-            playerOnePosition = playerOnePosition - spaceJump;
+            alert("Ssssssss, bad newsssss, you go back "+jumpBackward+" spacesssssss!");
+            playerOnePosition = playerOnePosition - jumpBackward;
             snake.fadeOut(5000);
             $('#'+playerOnePosition).append(playerOne).hide();
             $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+        } else if (x == villainPosition){
+            alert("The villain has hit a snake!!")
+            villainPosition = villainPosition - jumpBackward;
         }
     });
 }
@@ -206,21 +229,27 @@ const checkLadder = function () {
             ladder.show();
         ladder.shake();
         console.log("ladder!!")
-        alert("Yahoooo, good news, you go forward "+spaceJump+" spaces!");
-            playerOnePosition = playerOnePosition + spaceJump;
+        alert("Yahoooo, good news, you go forward "+jumpForward+" spaces!");
+            playerOnePosition = playerOnePosition + jumpForward;
             ladder.fadeOut(5000);
             $('#'+playerOnePosition).append(playerOne).hide();
             $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+        } else if (y == villainPosition) {
+            alert("Oh no... the villain has found a ladder....")
+            villainPosition = villainPosition + jumpForward;
         }
     });
 }
-// Create variable to determine a random number between one and ten that landing on a snake or ladder makes you jump
-var spaceJump = (Math.ceil(Math.random()* 10));
+// Create variables to determine a random number between one and ten that landing on a snake or ladder makes you jump
+var jumpForward = (Math.ceil(Math.random()* 10));
+var jumpBackward = (Math.ceil(Math.random()* 10));
 
 // Create a function that checks to determine if you win the game
 const checkWinner = function () {
     if (playerOnePosition >=(n*n)) {
         alert("You have defeated the snakes and won the game!!!")
+    } else if (villainPosition >= (n*n)) {
+        alert("You have been beaten by the evil villain!")
     }
 }
 
@@ -233,23 +262,69 @@ let button = $('button');
 let dice = $('#dice-id');
 let diceValue = 0;
 let playerOnePosition = 1;
-const rollDice = function () {
-    button.click(function () {
+let villainPosition = 1;
+const playerMove = function () {
+    // button.click(function () {
         console.log("button is clicked")
         dice.shake();
         diceValue = Math.ceil(Math.random()* 6);
         dice.attr("src", "images/dice-"+diceValue+".png")
         playerOnePosition += diceValue
-        console.log(playerOnePosition)
-        console.log($('#'+playerOnePosition))
+        // console.log(playerOnePosition)
+        // console.log($('#'+playerOnePosition))
         $('#'+playerOnePosition).append(playerOne).hide()
         $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
         checkSnake();
         checkLadder();
         checkWinner();
-    })
+    // })
+    return playerOnePosition
 }
-rollDice();
+// rollDice();
+// Make player move function that moves player according to dice value
+// Then check whether player has landed on a snake, a ladder or if they have won
+// const playerMove = function() {
+//     $('#'+playerOnePosition).append(playerOne).hide()
+//     $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
+//     checkSnake();
+//     checkLadder();
+//     checkWinner();
+// }
+
+// Make computer move function that generate random number between 1 and 6 and moves the computer relevant number of spaces
+// Then check whether computer had landed on a snake, a ladder or if it has won
+const computerMove = function () {
+    // alert("The evil villain is on their way, click ok to see how far they've got!")
+    let moveValue = Math.ceil(Math.random()* 6);
+    villainPosition += moveValue;
+    $('#'+villainPosition).append(villain).hide();
+    $('#'+villainPosition).append(villain).fadeIn(1000);
+    console.log(villainPosition)
+    console.log($('#'+villainPosition))
+    checkSnake();
+    checkLadder();
+    checkWinner();
+    return villainPosition
+}
+
+// Play game: 
+// call roll dice function, use it to update player position and check whether winner, snake or ladder
+// call computerMove function, use it to update computer position and check whether winner, snake or ladder
+const playGame = function () {
+    button.click(function () {
+        playerMove();
+    })
+    alert("The evil villain is on their way, click on them to see how far they've got!")
+    villain.click(function(){
+        console.log("villain clicked")
+        console.log(villainPosition)
+        computerMove();
+    })
+    // rollDice();
+}
+
+playGame();
+
 // console.log(snake1.parent())
 // if (snake1.parent == $('#'+playerOnePosition)) {
 //     console.log(matched)
