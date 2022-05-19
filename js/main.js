@@ -211,6 +211,7 @@ console.log(rocketEnd[test]);
 
 // Add meteor to the board
 let meteorPositions = [13, 20, 26, 34];
+let meteorEnd = [2, 18, 15, 21];
 let meteor = $('.meteor')
 const locateMeteor = function () {
     meteorPositions.forEach(element => {
@@ -267,7 +268,23 @@ const meteorAnimation = function (y) {
     })
 }
 
-// Make player animation function
+// Make function that moves player sequentially on the board to the end position
+const playerTravels = function () {
+    let pos =  0;
+    let playerUpdate = playerOnePosition;
+        let int = setInterval(move, 150);
+        function move() {
+            if (pos == playerOnePosition) {
+                console.log("int should stop now")
+                clearInterval(int)
+            } else {
+                pos++
+                console.log("incremental position: "+pos)
+                $('#'+(playerOnePosition)).append(playerOne)
+            }
+           }
+}
+
 
 
 // Add player icons to square one of the board
@@ -343,17 +360,41 @@ const playerMove = function () {
         console.log("button is clicked")
         dice.shake();
         diceValue = Math.ceil(Math.random()* 6);
+        console.log("dice value: "+diceValue);
+        console.log("player pos: "+playerOnePosition);
         dice.attr("src", "images/dice-"+diceValue+".png")
-        playerOnePosition += diceValue
+        playerTravels();
+        // for (let i = (playerOnePosition+1); i <= (playerOnePosition + diceValue); i++) {
+        // let pos =  0;
+        // let int = setInterval(move, 150);
+        // function move() {
+        //     if (pos == playerOnePosition + diceValue) {
+        //         console.log("int should stop now")
+        //         clearInterval(int)
+        //     } else {
+        //         pos++
+        //         console.log("incremental position: "+pos)
+        //         $('#'+(playerOnePosition+pos)).append(playerOne)
+        //     }
+        //    }
+            // $('#'+i).append(playerOne).fadeOut(500);
+            // $('#'+i).append(playerOne).fadeOut(500);
+            // $('#'+i).show();
+            // $('#'+i+'img').fadeOut(500);
+            // $('#'+(i+1)).append(playerOne).fadeIn(1000);
+            // $('#'+(i+1)).show();
+        // }
         // console.log(playerOnePosition)
         // console.log($('#'+playerOnePosition))
-        $('#'+playerOnePosition).append(playerOne).hide()
-        $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
+        // $('#'+playerOnePosition).append(playerOne).hide()
+        // $('#'+playerOnePosition).append(playerOne).fadeIn(1000)
         checkRocket();
         checkMeteor();
         checkWinner();
         button.off("click");
     // })
+    playerOnePosition += diceValue
+    console.log("player pos after move: "+playerOnePosition);
     return playerOnePosition
 }
 // rollDice();
