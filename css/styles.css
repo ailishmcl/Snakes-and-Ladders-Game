@@ -1,8 +1,13 @@
 body {
-    background-color: darkseagreen;
+    font-family: 'Orbitron', sans-serif;
     position: relative;
+    background-color: black;
+    color: #FF10F0;
+    background-image: url("../images/space2.jpg");
+    background-size: cover;
 }
 .welcomeMessage {
+    color: #b133c9;
     text-align: center;
     z-index: 1000;
     top: 50%;
@@ -13,17 +18,31 @@ body {
 .welcomeMessage p {
     align-self: center;
 }
+.welcomeMessage #mission {
+    font-size: 30px;
+}
 h1 {
     text-align: center;
+    font-size: 80px;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
 }
+@-webkit-keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  }
 .container {
-    background-color: peru;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 .board {
-    background-color: palevioletred;
    
 }
 .row {
@@ -37,18 +56,23 @@ h1 {
     position: relative;
 }
 .dice {
-    background-color: white;
+    
     width: 300px;
     height: 300px;
     align-self: center;
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    justify-content: space-around;
 }
 button {
      align-self: center;
      font-size: 20px;
      padding: 10px 20px;
-     box-shadow: 2px 5px;
+     background-color: #FF10F0;
+     box-shadow: 5px 1px #b133c9;
+     font-family: 'Orbitron', sans-serif;
+     color: white;
+     border: none;
 }
 #dice-id {
     align-self: center;
@@ -56,7 +80,6 @@ button {
     width: 150px;
 }
 .selector {
-    background-color: blue;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -72,6 +95,9 @@ button {
 }
 #chooseSuperhero {
     color: white;
+    background-color: #FF10F0;
+    padding: 10px;
+    margin: 20px;
 }
 .superhero img {
     height: 50px;

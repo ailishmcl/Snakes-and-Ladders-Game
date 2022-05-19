@@ -1,3 +1,4 @@
+
 //Creating a matrix array to create number the board from 1 to n
 
 let n =6;
@@ -90,7 +91,7 @@ const boardColor = function() {
             // console.log($('.row:nth-child('+i+') .block:nth-child('+j+')').text())
             if ($('.row:nth-child('+i+') .block:nth-child('+j+')').text() % 2 ==0){
                 // console.log("even")
-                $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "red")
+                $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "#b133c9")
         } else {
             $('.row:nth-child('+i+') .block:nth-child('+j+')').css("background-color", "white")
         }
@@ -101,8 +102,8 @@ const boardColor = function() {
 boardColor();
 
 // Add text box to explain game
-$('body').prepend('<div class="welcomeMessage"> <p> Welcome to Race to Space! <br> Click to roll the dice and then click Grok, the evil villain, before you click again!<br> Double click this box to get started!</p></div>')
-$('.welcomeMessage').css({"position": "absolute", "width": "400px", "height": "300px", "background-color": "white", "color": "red"});
+$('body').prepend('<div class="welcomeMessage"> <p id="mission"> Your mission: </p> <br><p> You must get to outer space before the evil villain, Grok, and disarm the bomb that threatens to destroy mankind!! <br><br> First, choose your superhero. Then roll the dice to see how far you travel. <br> The rockets will launch you forward but beware of meteors, being hit by one of them will send you back towards earth! <br><br>Click Grok before you click again! Fingers crossed he gets hit by a meteor!<br><br> Double click this box to get started!</p></div>')
+$('.welcomeMessage').css({"position": "absolute", "width": "600px", "height": "500px", "background-color": "white", "color": "red"});
 // Add function to close pop up and start the game
 const closePopUp = function () {
     $('.welcomeMessage').dblclick(function() {
@@ -113,7 +114,7 @@ closePopUp();
 
 
 //Add superhero selector
-$('.selector').prepend('<p id="chooseSuperhero">Click to choose your superhero!</p>')
+$('.selector').prepend('<p id="chooseSuperhero">Click on your chosen superhero!</p>')
 $('.selector').append('<div class="superhero" id="pyro"></div><div class="superhero" id="speed"></div><div class="superhero" id="power"></div>')
 $('#pyro').append('<img src="images/pyro.png" id="pyroImg"/>');
 $('#power').append('<img src="images/power.png" id="powerImg"/>');
@@ -247,8 +248,8 @@ locateMeteor();
 //  Make rocket animation function
 const rocketAnimation = function (x) {
         $('#rocket'+x).animate({
-        height: (50+(jumpForward*20))+"px",
-        width: (50+(jumpForward*20))+"px",
+        height: "300px",
+        width: "300px",
         bottom: "+=900px",
         left: "+=900px"
     }, 5000, function () {
@@ -259,8 +260,8 @@ const rocketAnimation = function (x) {
 // Make meteor animation function
 const meteorAnimation = function (y) {
     $('#meteor'+y).animate({
-        height: (50+(jumpForward*20))+"px",
-        width: (50+(jumpForward*20))+"px",
+        height: "300px",
+        width: "300px",
         top: "+=900px",
         right: "+=900px"
     }, 5000, function () {
@@ -269,22 +270,65 @@ const meteorAnimation = function (y) {
 }
 
 // Make function that moves player sequentially on the board to the end position
-const playerTravels = function () {
+// Function takes argument a = no of spaces player should move (can be positive or negative)
+// Function also takes argument b which is current position of player
+const playerTravels = function (a, b) {
     let pos =  0;
-    let playerUpdate = playerOnePosition;
+    // let playerUpdate = playerOnePosition;
         let int = setInterval(move, 150);
         function move() {
-            if (pos == playerOnePosition) {
-                console.log("int should stop now")
-                clearInterval(int)
-            } else {
-                pos++
+            if (a > 0) {
+                if (pos == a) {
+                    console.log("int should stop now")
+                    clearInterval(int)
+                } else {
+                    pos++
                 console.log("incremental position: "+pos)
-                $('#'+(playerOnePosition)).append(playerOne)
-            }
+                console.log("p1 pos in else statment is: "+playerOnePosition)
+                $('#'+(b + pos)).append(playerOne)
+                }
+            } else {
+                if (pos == a) {
+                    console.log("int should stop now, gone backwards")
+                    clearInterval(int)
+                } else {
+                    pos--
+                    $('#'+(b + pos)).append(playerOne)
+                }
+            }            
            }
+     playerOnePosition += a;
+     console.log("after player travels p1p is "+playerOnePosition)
 }
 
+// Make function that moves villain across board to end position
+// Function will take argument a = no of spaces to move (positive or negative)
+// Function will also take argument b = current position of villain
+const villainTravels = function (a, b) {
+    let vos = 0;
+    let intV = setInterval(moveV, 150);
+    function moveV() {
+        if (a > 0) {
+            if (vos == a) {
+                console.log("villain interval should stop now")
+                clearInterval(intV)
+            } else {
+                vos++
+                console.log("villain position in travel fxn is:"+villainPosition)
+                $('#'+(b + vos)).append(villain)
+            }
+        } else {
+            if (vos == a) {
+                console.log("intV should stop now, villain gone backwards")
+                    clearInterval(intV)
+            } else {
+                $('#'+(b + vos)).append(villain)
+            }
+        }
+    }
+    villainPosition += a;
+    console.log("after vill travels vp is "+villainPosition)
+}
 
 
 // Add player icons to square one of the board
@@ -303,15 +347,22 @@ const checkRocket = function() {
         if (x == playerOnePosition) {
             rocketAnimation(x);
             console.log("rocket!!!")
+            var endIndex = rocketPositions.indexOf(x);
+            var spacesToMove = rocketEnd[endIndex] - playerOnePosition
+            playerTravels(spacesToMove, playerOnePosition);
+            // playerOnePosition = rocketEnd[endIndex];
             // alert("Ssssssss, bad newsssss, you go back "+jumpBackward+" spacesssssss!");
-            playerOnePosition = playerOnePosition + jumpForward;
+            // playerOnePosition = playerOnePosition + jumpForward;
             // snake.fadeOut(5000);
-            $('#'+playerOnePosition).append(playerOne).hide();
-            $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+            // $('#'+playerOnePosition).append(playerOne).hide();
+            // $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
         } else if (x == villainPosition){
             rocketAnimation(x);
-            alert("The villain has hopped on a rocket!!")
-            villainPosition = villainPosition + jumpForward;
+            console.log("The villain has hopped on a rocket!!")
+            var endIndexVill = rocketPositions.indexOf(x);
+            var spacesToMoveVill = rocketEnd[endIndexVill] - villainPosition
+            villainTravels(spacesToMoveVill, villainPosition);
+            // villainPosition = villainPosition + jumpForward;
         }
     });
 }
@@ -321,20 +372,26 @@ const checkMeteor = function () {
         meteorAnimation(y);
         console.log("meteor!!")
         // alert("Yahoooo, good news, you go forward "+jumpForward+" spaces!");
-            playerOnePosition = playerOnePosition - jumpBackward;
+        var endIndexMet = meteorPositions.indexOf(y);
+        var spacesToMoveMet = meteorEnd[endIndexMet] - playerOnePosition
+        playerTravels(spacesToMoveMet, playerOnePosition)
+            // playerOnePosition = playerOnePosition - jumpBackward;
             // ladder.fadeOut(5000);
-            $('#'+playerOnePosition).append(playerOne).hide();
-            $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
+            // $('#'+playerOnePosition).append(playerOne).hide();
+            // $('#'+playerOnePosition).append(playerOne).fadeIn(5000);
         } else if (y == villainPosition) {
             meteorAnimation(y);
-            alert("Good news... the villain has been hit by a meteor....")
-            villainPosition = villainPosition - jumpBackward;
+            console.log("Good news... the villain has been hit by a meteor....")
+            var endIndexMetVill = meteorPositions.indexOf(y);
+            var spacesToMoveMetVill = meteorEnd[endIndexMetVill] - villainPosition
+            villainTravels(spacesToMoveMetVill, villainPosition)
+            // villainPosition = villainPosition - jumpBackward;
         }
     });
 }
 // Create variables to determine a random number between one and ten that landing on a snake or ladder makes you jump
-var jumpForward = (Math.ceil(Math.random()* 10));
-var jumpBackward = (Math.ceil(Math.random()* 10));
+// var jumpForward = (Math.ceil(Math.random()* 10));
+// var jumpBackward = (Math.ceil(Math.random()* 10));
 
 // Create a function that checks to determine if you win the game
 const checkWinner = function () {
@@ -363,7 +420,8 @@ const playerMove = function () {
         console.log("dice value: "+diceValue);
         console.log("player pos: "+playerOnePosition);
         dice.attr("src", "images/dice-"+diceValue+".png")
-        playerTravels();
+        playerTravels(diceValue, playerOnePosition);
+        console.log("player pos after move: "+playerOnePosition);
         // for (let i = (playerOnePosition+1); i <= (playerOnePosition + diceValue); i++) {
         // let pos =  0;
         // let int = setInterval(move, 150);
@@ -391,10 +449,10 @@ const playerMove = function () {
         checkRocket();
         checkMeteor();
         checkWinner();
-        button.off("click");
+        // button.off("click");
     // })
-    playerOnePosition += diceValue
-    console.log("player pos after move: "+playerOnePosition);
+    
+    console.log("player position after checks etc.: "+playerOnePosition)
     return playerOnePosition
 }
 // rollDice();
@@ -413,16 +471,18 @@ const playerMove = function () {
 const computerMove = function () {
     // alert("The evil villain is on their way, click ok to see how far they've got!")
     let moveValue = Math.ceil(Math.random()* 6);
-    villainPosition += moveValue;
-    $('#'+villainPosition).append(villain).hide();
-    $('#'+villainPosition).append(villain).fadeIn(1000);
-    console.log(villainPosition)
-    console.log($('#'+villainPosition))
+    // villainPosition += moveValue;
+    // $('#'+villainPosition).append(villain).hide();
+    // $('#'+villainPosition).append(villain).fadeIn(1000);
+    console.log("villain pos is: "+villainPosition)
+    console.log("random move value is: "+moveValue)
+    villainTravels(moveValue, villainPosition);
+    console.log("villain pos after move: "+villainPosition);
     checkRocket();
     checkMeteor();
     checkWinner();
-    button.on("click", playerMove);
-    return villainPosition
+    // button.on("click", playerMove);
+    // return villainPosition
 }
 
 // Play game: 
@@ -430,9 +490,12 @@ const computerMove = function () {
 // call computerMove function, use it to update computer position and check whether winner, snake or ladder
 const playGame = function () {
     button.click(function () {
+        console.log("dice button clicked")
         playerMove();
+        // playerOnePosition += diceValue
+        console.log("P1 pos in playGame fxn: "+playerOnePosition)
     });
-    alert("The evil villain is on their way, click on them to see how far they've got!")
+    // alert("The evil villain is on their way, click on them to see how far they've got!")
     villain.click(function(){
         console.log("villain clicked")
         console.log(villainPosition)
