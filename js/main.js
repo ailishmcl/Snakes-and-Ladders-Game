@@ -101,9 +101,16 @@ const boardColor = function() {
 boardColor();
 
 // Add text box to explain game
-$('body').prepend('<div class="welcomeMessage"> <p> Welcome to Race to Space! <br> Click to roll the dice and then click Grok, the evil villain, before you click again!</p></div>')
+$('body').prepend('<div class="welcomeMessage"> <p> Welcome to Race to Space! <br> Click to roll the dice and then click Grok, the evil villain, before you click again!<br> Double click this box to get started!</p></div>')
 $('.welcomeMessage').css({"position": "absolute", "width": "400px", "height": "300px", "background-color": "white", "color": "red"});
-// $('.welcomeMessage').hide();
+// Add function to close pop up and start the game
+const closePopUp = function () {
+    $('.welcomeMessage').dblclick(function() {
+        $('.welcomeMessage').hide();
+    })
+}
+closePopUp();
+
 
 //Add superhero selector
 $('.selector').prepend('<p id="chooseSuperhero">Click to choose your superhero!</p>')
@@ -187,6 +194,7 @@ villain.css({"position": "absolute", "height": "50px", "width": "50px"})
 
 // Add rocket to board
 let rocketPositions = [4, 17, 23, 10]
+let rocketEnd = [9, 27, 25, 12]
 let rocket = $('.rocket')
 const locateRocket = function () {
     rocketPositions.forEach(element => {
@@ -195,6 +203,11 @@ const locateRocket = function () {
         // $('#'+element).append('<img class="rocket" src="images/rocket.png" />')
     });
 }
+
+// Test whether you can get index of rocket positions easily
+var test = rocketPositions.indexOf(23)
+console.log(test);
+console.log(rocketEnd[test]);
 
 // Add meteor to the board
 let meteorPositions = [13, 20, 26, 34];
@@ -253,6 +266,9 @@ const meteorAnimation = function (y) {
         locateMeteor()
     })
 }
+
+// Make player animation function
+
 
 // Add player icons to square one of the board
 // $('#1').append('<img src="images/super-gal.png" id="player-1" />');
