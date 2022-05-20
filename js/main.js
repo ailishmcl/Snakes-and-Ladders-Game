@@ -81,7 +81,7 @@ boardColor();
 // Add text box that lies on top of page to explain game
 
 $('body').prepend('<div class="welcomeMessage"> <p id="mission"> Your mission: </p> <br><p> You must get to outer space before the evil villain, Grok, and disarm the bomb that threatens to destroy mankind!! <br><br> First, choose your superhero. Then roll the dice to see how far you travel. <br> The rockets will launch you forward but beware of meteors, being hit by one of them will send you back towards earth! <br><br>Click Grok before you click again! Fingers crossed he gets hit by a meteor!<br><br> Double click this box to get started!</p></div>')
-$('.welcomeMessage').css({"position": "absolute", "width": "600px", "height": "500px", "background-color": "white", "color": "red"});
+$('.welcomeMessage').css({"position": "absolute", "width": boardSize + "px", "height": boardSize + "px", "background-color": "white", "color": "red"});
 
 // Add function to close pop up and start the game
 

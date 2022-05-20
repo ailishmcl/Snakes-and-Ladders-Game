@@ -17,9 +17,11 @@ body {
 }
 .welcomeMessage p {
     align-self: center;
+    margin: 50px;
+    font-size: 20px;
 }
 .welcomeMessage #mission {
-    font-size: 30px;
+    font-size: 40px;
 }
 h1 {
     text-align: center;
