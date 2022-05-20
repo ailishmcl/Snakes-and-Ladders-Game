@@ -123,3 +123,9 @@ button {
     height: 50px;
     width: 50px;
 }
+.links {
+    margin-top: 20px;
+}
+a {
+    font-size: 10px;
+}
